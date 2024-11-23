@@ -7,40 +7,41 @@
 import streamlit as st
 import requests
 
-# Replace with your Gemini API URL and Key
-GEMINI_API_URL = "https://api.gemini.com/v1/chat"
-API_KEY = "AIzaSyD2twuzUQBL5RCd9JsIgiBEhPaoDo5NB7M"
+# Hugging Face API URL for LLaMA model (adjust based on the specific model you're using)
+MODEL_URL = "https://api-inference.huggingface.co/models/meta-llama/Llama-3.2-1B"  # Adjust model URL based on LLaMA version
+API_KEY = "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"  # Replace with your Hugging Face API key
 
-# Function to send a message to the Gemini API
-def send_message_to_gemini(user_input):
+# Function to send a message to the Hugging Face LLaMA model
+def query_llama(message):
     headers = {
         "Authorization": f"Bearer {API_KEY}",
         "Content-Type": "application/json",
     }
     payload = {
-        "message": user_input,
+        "inputs": message,
+        "options": {"use_cache": False}  # Optional: can disable cache if needed
     }
     try:
-        response = requests.post(GEMINI_API_URL, headers=headers, json=payload)
-        response.raise_for_status()
-        return response.json().get("response", "Sorry, I didn't understand that.")
+        response = requests.post(MODEL_URL, headers=headers, json=payload)
+        response.raise_for_status()  # Raise an error if the request fails
+        return response.json()[0]["generated_text"]
     except requests.exceptions.RequestException as e:
         return f"Error: {e}"
 
 # Streamlit Interface
-st.title("Simple Chatbot")
-st.write("Chat with me using the Gemini API!")
+st.title("Chat with LLaMA Bot!")
+st.write("Ask me anything, and I'll respond using the LLaMA model hosted on Hugging Face.")
 
 # Input Box for User Input
 user_input = st.text_input("You:", placeholder="Type your message here...")
 
 if user_input:
-    # Process the input and display the response
     with st.spinner("Thinking..."):
-        bot_response = send_message_to_gemini(user_input)
+        bot_response = query_llama(user_input)
     st.write(f"Bot: {bot_response}")
 
 # Add a footer
 st.markdown("---")
-st.markdown("Built with ❤️ using Streamlit and Gemini API.")
+st.markdown("Built with ❤️ using Streamlit and LLaMA model via Hugging Face.")
+
 
