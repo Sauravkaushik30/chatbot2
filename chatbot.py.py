@@ -8,7 +8,7 @@ import streamlit as st
 import requests
 
 # Hugging Face API URL for LLaMA model (adjust based on the specific model you're using)
-MODEL_URL = "https://huggingface.co/nvidia/Llama-3.1-Nemotron-70B-Instruct-HF"  # Adjust model URL based on LLaMA version
+MODEL_URL = "https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct"  # Adjust model URL based on LLaMA version
 API_KEY = "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"  # Replace with your Hugging Face API key
 
 # Function to send a message to the Hugging Face LLaMA model
